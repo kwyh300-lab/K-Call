@@ -38,6 +38,19 @@ jobs:
               with open(path, "w") as f:
                   f.write(s)
           '
+          if [ -f android/settings.gradle ]; then
+            cat << 'EOF' >> android/settings.gradle
+
+          gradle.beforeProject { project ->
+              project.plugins.withId("com.android.application") {
+                  project.android.compileSdk = 35
+              }
+              project.plugins.withId("com.android.library") {
+                  project.android.compileSdk = 35
+              }
+          }
+          EOF
+          fi
       - run: flutter pub get
       - run: flutter build apk --release --no-tree-shake-icons
       - uses: actions/upload-artifact@v4
