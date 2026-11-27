@@ -37,6 +37,18 @@ jobs:
                   s = re.sub(r"(android\s*\{)", rf"\1\n    compileSdk{eq}35", s, count=1)
               with open(path, "w") as f:
                   f.write(s)
+          for path in glob.glob("android/settings.gradle*"):
+              with open(path, "r") as f:
+                  s = f.read()
+              s = re.sub(r"(id\s*\(?[\"\x27]org\.jetbrains\.kotlin\.android[\"\x27]\)?\s+version\s*[\"\x27])[^\"\x27]+([\"\x27])", r"\g<1>2.0.21\2", s)
+              with open(path, "w") as f:
+                  f.write(s)
+          for path in glob.glob("android/build.gradle*"):
+              with open(path, "r") as f:
+                  s = f.read()
+              s = re.sub(r"(ext\.kotlin_version\s*=\s*[\"\x27])[^\"\x27]+([\"\x27])", r"\g<1>2.0.21\2", s)
+              with open(path, "w") as f:
+                  f.write(s)
           '
       - run: flutter pub get
       - run: |
