@@ -42,12 +42,15 @@ jobs:
           '
           cat << 'EOF' >> android/build.gradle
 
-          subprojects {
-              afterEvaluate { project ->
-                  if (project.hasProperty("android")) {
-                      project.android {
-                          compileSdkVersion 35
-                      }
+          subprojects { p ->
+              p.plugins.withId("com.android.application") {
+                  p.android {
+                      compileSdkVersion 35
+                  }
+              }
+              p.plugins.withId("com.android.library") {
+                  p.android {
+                      compileSdkVersion 35
                   }
               }
           }
