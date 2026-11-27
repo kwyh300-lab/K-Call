@@ -16,11 +16,10 @@ jobs:
           channel: 'stable'
       - run: flutter create --org com.example --project-name k_call .
       - run: |
-          [ -f lib/pubspec.yaml ] && cp lib/pubspec.yaml pubspec.yaml
-          [ -f lib/main.dart ] && cp lib/main.dart lib/main.dart
+          if [ -f lib/pubspec.yaml ]; then cp -f lib/pubspec.yaml pubspec.yaml; fi
           mkdir -p android/app
-          if [ -f google-services.json ]; then cp google-services.json android/app/google-services.json; fi
-          if [ -f lib/google-services.json ]; then cp lib/google-services.json android/app/google-services.json; fi
+          if [ -f google-services.json ]; then cp -f google-services.json android/app/google-services.json; fi
+          if [ -f lib/google-services.json ]; then cp -f lib/google-services.json android/app/google-services.json; fi
       - run: flutter pub get
       - run: flutter build apk --release
       - uses: actions/upload-artifact@v4
