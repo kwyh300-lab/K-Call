@@ -26,7 +26,21 @@ jobs:
           if [ -f google-services.json ]; then cp -f google-services.json android/app/google-services.json; fi
           if [ -f lib/google-services.json ]; then cp -f lib/google-services.json android/app/google-services.json; fi
           python3 -c '
-          import glob, re
+          import glob, re, os
+          if os.path.exists("pubspec.yaml"):
+              with open("pubspec.yaml", "r") as f:
+                  p = f.read()
+              # Ensure dependency_overrides aligns zego packages cleanly
+              overrides = """
+          dependency_overrides:
+            zego_uikit: 2.28.23
+            zego_plugin_adapter: 2.14.3
+            zego_callkit: 1.0.0+6
+          """
+              if "dependency_overrides:" not in p:
+                  p = p.rstrip() + "\n" + overrides
+              with open("pubspec.yaml", "w") as f:
+                  f.write(p)
           for path in glob.glob("android/app/build.gradle*"):
               with open(path, "r") as f:
                   s = f.read()
