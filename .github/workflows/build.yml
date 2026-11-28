@@ -21,7 +21,7 @@ jobs:
       - run: flutter create --org com.example --project-name k_call .
       - run: |
           if [ -f lib/pubspec.yaml ]; then cp -f lib/pubspec.yaml pubspec.yaml; fi
-          rm -f pubspec.lock
+          rm -f pubspec.lock .dart_tool/package_config.json
           mkdir -p android/app
           if [ -f google-services.json ]; then cp -f google-services.json android/app/google-services.json; fi
           if [ -f lib/google-services.json ]; then cp -f lib/google-services.json android/app/google-services.json; fi
