@@ -21,9 +21,20 @@ jobs:
       - run: flutter create --org com.example --project-name k_call .
       - run: |
           if [ -f lib/pubspec.yaml ]; then cp -f lib/pubspec.yaml pubspec.yaml; fi
+          rm -f pubspec.lock
           mkdir -p android/app
           if [ -f google-services.json ]; then cp -f google-services.json android/app/google-services.json; fi
           if [ -f lib/google-services.json ]; then cp -f lib/google-services.json android/app/google-services.json; fi
+          python3 -c '
+          import re
+          if __import__("os").path.exists("pubspec.yaml"):
+              with open("pubspec.yaml", "r") as f:
+                  p = f.read()
+              # Relax pinned/conflicting zego_* versions so pub resolves a compatible set
+              p = re.sub(r"^(\s*zego_[a-zA-Z0-9_]+:\s*).+$", r"\1any", p, flags=re.M)
+              with open("pubspec.yaml", "w") as f:
+                  f.write(p)
+          '
           python3 -c '
           import glob, re
           for path in glob.glob("android/app/build.gradle*"):
